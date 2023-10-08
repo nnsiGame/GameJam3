@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     [SerializeField] float m_AccelerationSpeed = 14.5f; // 加速度
     [SerializeField] float m_JumpPower = 5f;            // ジャンプ力
 
-    [SerializeField] float m_BoxCastDistance = 0.3f;
+    bool m_IsJump;
 
     [SerializeField] GameObject m_AMagic;
     [SerializeField] GameObject m_BMagic;
@@ -33,6 +33,8 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        m_IsJump = false;
+
         m_CurrentState = State.Normal;
         m_SceneManager = GameObject.FindWithTag("SceneManager").GetComponent<BGMManager>();
         m_CurrentSpeed = 0;
@@ -71,11 +73,15 @@ public class Player : MonoBehaviour
         {
             if (m_CurrentSpeed < m_MoveSpeed - 0.1f) m_CurrentSpeed = Mathf.Lerp(m_CurrentSpeed, m_MoveSpeed, accelerationSpeed);
             else m_CurrentSpeed = m_MoveSpeed;
+
+            transform.rotation = new Quaternion(transform.rotation.x, 0, transform.rotation.z, transform.rotation.w);
         }
         else if (moveX < 0) // 左が押された場合
         {
             if (m_CurrentSpeed > -m_MoveSpeed + 0.1f) m_CurrentSpeed = Mathf.Lerp(m_CurrentSpeed, -m_MoveSpeed, accelerationSpeed);
             else m_CurrentSpeed = -m_MoveSpeed;
+
+            transform.rotation = new Quaternion(transform.rotation.x, 180, transform.rotation.z, transform.rotation.w);
         }
         else // 何も押されていない、もしくは両方が押されている場合
         {
@@ -83,6 +89,7 @@ public class Player : MonoBehaviour
             else m_CurrentSpeed = 0.0f;
         }
 
+        m_Animator.SetFloat("VelocityX", Mathf.Abs(moveX));
         Vector2 newVelocity = new Vector2(m_CurrentSpeed, m_RB.velocity.y);
         m_RB.velocity = newVelocity;
     }
@@ -94,21 +101,40 @@ public class Player : MonoBehaviour
         if (!Input.GetButtonDown("Jump")) return;
 
         // 接地していない場合はreturn
-        if (!CanJump()) return;
+        if (m_IsJump) return;
 
         m_RB.AddForce(Vector2.up * m_JumpPower, ForceMode2D.Impulse);
+        m_Animator.SetTrigger("Jump");
+        m_Animator.ResetTrigger("JumpEnd");
+        m_IsJump = true;
+
+        StartCoroutine(CanJump());
+
+        IEnumerator CanJump()
+        {
+            yield return new WaitForSeconds(0.2f);
+
+            while (true)
+            {
+                LayerMask layer = 1 << LayerMask.NameToLayer("Floor");
+                RaycastHit2D boxCast = Physics2D.BoxCast(m_BoxCastOrigin.position, new Vector2(1, 1), 0, -transform.up, 0.1f, layer);
+
+                m_IsJump = boxCast.collider == null;
+
+                if (!m_IsJump)
+                {
+                    m_Animator.SetTrigger("JumpEnd");
+                    yield break;
+                }
+
+                yield return null;
+            }
+        }
     }
 
-    bool CanJump()
-    {
-        LayerMask layer = 1 << LayerMask.NameToLayer("Floor");
-        RaycastHit2D boxCast =  Physics2D.BoxCast(m_BoxCastOrigin.position, new Vector2(1, 1), 0, -transform.up, m_BoxCastDistance, layer);
-
-        return boxCast.collider != null;
-    }
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawCube(m_BoxCastOrigin.position,new Vector2(1,1));
+        Gizmos.DrawCube(m_BoxCastOrigin.position, new Vector2(1, 1));
     }
 }
