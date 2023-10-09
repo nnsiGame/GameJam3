@@ -47,6 +47,4 @@ public class BGMManager : MonoBehaviour
 
         m_ABGM = !m_ABGM;
     }
-
-
 }

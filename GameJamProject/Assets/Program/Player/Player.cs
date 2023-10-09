@@ -18,6 +18,8 @@ public class Player : MonoBehaviour
     bool m_IsJump;
     bool m_CanCreateShockWave; // 衝撃波を生成してよいか？
 
+    public bool m_IsDead { get; private set; }
+
     [SerializeField] GameObject m_AMagic;
     [SerializeField] GameObject m_BMagic;
     [SerializeField] GameObject m_ShockWave;
@@ -46,6 +48,7 @@ public class Player : MonoBehaviour
     {
         m_IsJump = false;
         m_CanCreateShockWave = false;
+        m_IsDead = false;
 
         m_CurrentState = State.Normal;
         m_BGMManager = GameObject.FindWithTag("BGMManager").GetComponent<BGMManager>();
@@ -69,6 +72,8 @@ public class Player : MonoBehaviour
             m_Animator.ResetTrigger("HitDamage");
             transform.parent = null;
             m_CurrentState = State.Die;
+
+            m_IsDead = true;
         }
 
         if (m_CurrentState == State.Normal)
@@ -78,16 +83,48 @@ public class Player : MonoBehaviour
             if (attack) m_Animator.SetTrigger("Attack");
 
 
-            // BGMをチェンジする
-            if (Input.GetButtonDown("ChangeBGM"))
+            if(m_BGMManager.m_ABGM && m_AMusicGage < 0)
             {
                 m_BGMManager.ChangeBGM();
 
                 m_Particle.Play();
+            }
+            else if(!m_BGMManager.m_ABGM && m_BMusicGage < 0)
+            {
+                m_BGMManager.ChangeBGM();
 
-                if (m_CanCreateShockWave)
+                m_Particle.Play();
+            }
+
+            // BGMをチェンジする
+            if (Input.GetButtonDown("ChangeBGM"))
+            {
+
+                if (m_BGMManager.m_ABGM)
                 {
-                    Instantiate(m_ShockWave, m_ShockWaveCreatePoint.position, Quaternion.identity);
+                    if(m_BMusicGage > 0)
+                    {
+                        change();
+                    }
+                }
+                else
+                {
+                    if(m_AMusicGage > 0)
+                    {
+                        change();
+                    }
+                }
+
+                void change()
+                {
+                    m_BGMManager.ChangeBGM();
+
+                    m_Particle.Play();
+
+                    if (m_CanCreateShockWave)
+                    {
+                        Instantiate(m_ShockWave, m_ShockWaveCreatePoint.position, Quaternion.identity);
+                    }
                 }
             }
 
@@ -216,6 +253,14 @@ public class Player : MonoBehaviour
 
         if (collision.CompareTag("OrangeEnemy") || collision.CompareTag("PurpleEnemy") || collision.CompareTag("LargeEnemy"))
         {
+            if (m_BGMManager.m_ABGM)
+            {
+                m_AMusicGage -= 5;
+            }
+            else
+            {
+                m_BMusicGage -= 5;
+            }
             m_Animator.SetTrigger("HitDamage");
         }
     }
