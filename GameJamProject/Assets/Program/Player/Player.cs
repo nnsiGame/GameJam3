@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+
+
     float m_CurrentSpeed;                               // 現在の移動スピード
     [SerializeField] float m_MoveSpeed = 16f;           // 移動スピードの最大値
     [SerializeField] float m_AccelerationSpeed = 14.5f; // 加速度
     [SerializeField] float m_JumpPower = 5f;            // ジャンプ力
 
     bool m_IsJump;
-    bool m_CanChangeBGM;
+    bool m_CanCreateShockWave; // 衝撃波を生成してよいか？
 
     [SerializeField] GameObject m_AMagic;
     [SerializeField] GameObject m_BMagic;
+    [SerializeField] GameObject m_ShockWave;
 
     [SerializeField] Transform m_MagicCreatePoint; // 魔法を生成するポジション
     [SerializeField] Transform m_BoxCastOrigin;    // BoxCastを放つオリジン
@@ -35,10 +38,10 @@ public class Player : MonoBehaviour
     void Start()
     {
         m_IsJump = false;
-        m_CanChangeBGM = false;
+        m_CanCreateShockWave = false;
 
         m_CurrentState = State.Normal;
-        m_BGMManager = GameObject.FindWithTag("SceneManager").GetComponent<BGMManager>();
+        m_BGMManager = GameObject.FindWithTag("BGMManager").GetComponent<BGMManager>();
         m_CurrentSpeed = 0;
         m_RB = GetComponent<Rigidbody2D>();
 
@@ -53,7 +56,16 @@ public class Player : MonoBehaviour
             bool attack = Input.GetMouseButtonDown(0);
             if (attack) Instantiate(m_BGMManager.m_ABGM ? m_AMagic : m_BMagic, m_MagicCreatePoint.position, m_MagicCreatePoint.transform.rotation);
 
-            if (Input.GetButtonDown("ChangeBGM") && m_CanChangeBGM) m_BGMManager.ChangeBGM();
+            // BGMをチェンジする
+            if (Input.GetButtonDown("ChangeBGM"))
+            {
+                m_BGMManager.ChangeBGM();
+
+                if (m_CanCreateShockWave)
+                {
+                    Instantiate(m_ShockWave, transform.position, Quaternion.identity);
+                }
+            }
         }
     }
 
@@ -144,11 +156,11 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("ChangeBGMPoint")) m_CanChangeBGM = true;
+        if (collision.CompareTag("ChangeBGMPoint")) m_CanCreateShockWave = true;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("ChangeBGMPoint")) m_CanChangeBGM = false;
+        if (collision.CompareTag("ChangeBGMPoint")) m_CanCreateShockWave = false;
     }
 }

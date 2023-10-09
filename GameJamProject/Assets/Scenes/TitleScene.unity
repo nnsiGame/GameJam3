@@ -234,77 +234,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4b8b65f8513b52438d9c5a4ff58b252, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &86875882
-MonoBehaviour:
+--- !u!95 &86875882
+Animator:
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 86875876}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b297fe8606b0c84ab991ce38b8110c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlayOnStart: 0
-  Volume: 1
-  OutputMixerGroup: {fileID: 0}
-  Sections:
-  - Name: Section
-    Clips:
-    - {fileID: 8300000, guid: e28b93c1314bdc744b1c2daffa59d0f8, type: 3}
-    Meters:
-    - StartBar: 0
-      Tempo: 120
-      UnitPerBeat: 4
-      UnitPerBar: 16
-      Numerator: 4
-      Denominator: 4
-    SyncType: 3
-    SyncFactor: 1
-    Markers: []
-    EntryPointTiming:
-      Bar: 0
-      Beat: 0
-      Unit: 0
-    ExitPointTiming:
-      Bar: 30
-      Beat: 0
-      Unit: 0
-    LoopStartTiming:
-      Bar: 0
-      Beat: 0
-      Unit: 0
-    LoopEndTiming:
-      Bar: 30
-      Beat: 0
-      Unit: 0
-    Transition:
-      UseFadeOut: 0
-      FadeOutTime: 0
-      FadeOutOffset: 0
-      UseFadeIn: 0
-      FadeInTime: 0
-      FadeInOffset: 0
-    TransitionType: 0
-    TransitionDestinationIndex: 0
-  Modes:
-  - Name: Mode
-    TotalVolume: 1
-    LayerVolumes:
-    - 1
-  ModeTransitionParam:
-    FadeTime: 1
-    FadeOffset: 0
-    TimeUnitType: 0
-    SyncType: 0
-    SyncFactor: 1
-  SectionTransitionOverrides: []
-  ModeTransitionOverrides: []
-  NumTracks: 1
-  SeekBar: -1
-  PreviewSectionIndex: 0
-  PreviewModeIndex: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 374173815fa94cd408a9fbffc7b976ea, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &575015548
 GameObject:
   m_ObjectHideFlags: 0
