@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class result : MonoBehaviour
 {
@@ -16,36 +17,39 @@ public class result : MonoBehaviour
     public int greatwonderful;
     public int wonderfulU;
 
+    public Text scoreText;
+
     void Start()
     {
-        //Script1 script1 = GetComponent<Script1>();
-        // int point = script1.myVariable;
-         int point = 0;
+        GameObject script1Object = GameObject.Find("Gamemanager");
+        ScoreManager script1 = script1Object.GetComponent<ScoreManager>();
+        int point = script1.m_Score;
 
 
 
-
-    good.SetActive(false);
+        good.SetActive(false);
         great.SetActive(false);
         wonderful.SetActive(false);
 
-        if (point>=goodD && point<100)
+        if (point>=goodD)
         {
-            good.SetActive(false);
+            good.SetActive(true);
 
         }
 
-        else if (point >= 0 && point < 100)
+        else if (point >= goodgreat && point < greatwonderful)
         {
-            great.SetActive(false);
+            great.SetActive(true);
 
         }
 
-        else if (point >= 0 && point < 100)
+        else if (point >= greatwonderful)
         {
-            wonderful.SetActive(false);
+            wonderful.SetActive(true);
 
         }
+
+        scoreText.text = "" +script1.m_Score;
     }
 
     // Update is called once per frame
