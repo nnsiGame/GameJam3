@@ -10,7 +10,6 @@ public class Player : MonoBehaviour
     [SerializeField] float m_JumpPower = 5f;            // ƒWƒƒƒ“ƒv—Í
 
     bool m_IsJump;
-    bool m_CanChangeBGM;
 
     [SerializeField] GameObject m_AMagic;
     [SerializeField] GameObject m_BMagic;
@@ -22,7 +21,7 @@ public class Player : MonoBehaviour
 
     Animator m_Animator;
 
-    BGMManager m_BGMManager;
+    BGMManager m_SceneManager;
 
     State m_CurrentState;
     enum State
@@ -35,10 +34,9 @@ public class Player : MonoBehaviour
     void Start()
     {
         m_IsJump = false;
-        m_CanChangeBGM = false;
 
         m_CurrentState = State.Normal;
-        m_BGMManager = GameObject.FindWithTag("SceneManager").GetComponent<BGMManager>();
+        m_SceneManager = GameObject.FindWithTag("SceneManager").GetComponent<BGMManager>();
         m_CurrentSpeed = 0;
         m_RB = GetComponent<Rigidbody2D>();
 
@@ -51,9 +49,7 @@ public class Player : MonoBehaviour
         {
             Jump();
             bool attack = Input.GetMouseButtonDown(0);
-            if (attack) Instantiate(m_BGMManager.m_ABGM ? m_AMagic : m_BMagic, m_MagicCreatePoint.position, m_MagicCreatePoint.transform.rotation);
-
-            if (Input.GetButtonDown("ChangeBGM") && m_CanChangeBGM) m_BGMManager.ChangeBGM();
+            if (attack) Instantiate(m_SceneManager.m_ABGM ? m_AMagic : m_BMagic, m_MagicCreatePoint.position, m_MagicCreatePoint.transform.rotation);
         }
     }
 
@@ -140,15 +136,5 @@ public class Player : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.DrawCube(m_BoxCastOrigin.position, new Vector2(1, 1));
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("ChangeBGMPoint")) m_CanChangeBGM = true;
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.CompareTag("ChangeBGMPoint")) m_CanChangeBGM = false;
     }
 }

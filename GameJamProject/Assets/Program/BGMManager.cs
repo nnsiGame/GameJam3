@@ -26,7 +26,15 @@ public class BGMManager : MonoBehaviour
         m_ABGM = true;
     }
 
-    public void ChangeBGM()
+    // Update is called once per frame
+    void Update()
+    {
+        // 右クリックを押すとBGMを切り替える
+        bool changeBGM = Input.GetButtonDown("ChangeBGM");
+        if (changeBGM) ChangeBGM();
+    }
+
+    void ChangeBGM()
     {
         if(m_ABGM)
         {
@@ -47,6 +55,4 @@ public class BGMManager : MonoBehaviour
 
         m_ABGM = !m_ABGM;
     }
-
-
 }
