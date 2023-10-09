@@ -1966,9 +1966,41 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6599969339175144927, guid: 22801f1b53f215e4fad456e630cff890, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 4.5924745
+      objectReference: {fileID: 0}
+    - target: {fileID: 6599969339175144927, guid: 22801f1b53f215e4fad456e630cff890, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.41558477
+      objectReference: {fileID: 0}
+    - target: {fileID: 6599969339175144927, guid: 22801f1b53f215e4fad456e630cff890, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5260567
+      objectReference: {fileID: 0}
+    - target: {fileID: 6599969339175144927, guid: 22801f1b53f215e4fad456e630cff890, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -675
+      objectReference: {fileID: 0}
+    - target: {fileID: 6599969339175144927, guid: 22801f1b53f215e4fad456e630cff890, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 418
+      objectReference: {fileID: 0}
     - target: {fileID: 6996553621086462410, guid: 22801f1b53f215e4fad456e630cff890, type: 3}
       propertyPath: m_Name
       value: PlayerCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 7476144601971105589, guid: 22801f1b53f215e4fad456e630cff890, type: 3}
+      propertyPath: m_Color.b
+      value: 0.4285333
+      objectReference: {fileID: 0}
+    - target: {fileID: 7476144601971105589, guid: 22801f1b53f215e4fad456e630cff890, type: 3}
+      propertyPath: m_Color.g
+      value: 0.67884564
+      objectReference: {fileID: 0}
+    - target: {fileID: 7476144601971105589, guid: 22801f1b53f215e4fad456e630cff890, type: 3}
+      propertyPath: m_Color.r
+      value: 0.8490566
       objectReference: {fileID: 0}
     - target: {fileID: 7704359913114797816, guid: 22801f1b53f215e4fad456e630cff890, type: 3}
       propertyPath: m_Pivot.x
