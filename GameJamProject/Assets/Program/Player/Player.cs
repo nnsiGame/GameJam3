@@ -86,7 +86,7 @@ public class Player : MonoBehaviour
         {
             Move();
 
-
+            if (!m_IsJump) ChackIsGround();
         }
     }
 
@@ -142,29 +142,43 @@ public class Player : MonoBehaviour
 
         StartCoroutine(CanJump());
 
-        IEnumerator CanJump()
+    }
+
+    IEnumerator CanJump()
+    {
+        yield return new WaitForSeconds(0.2f);
+
+        while (true)
         {
-            yield return new WaitForSeconds(0.2f);
+            LayerMask layer = 1 << LayerMask.NameToLayer("Floor");
+            RaycastHit2D boxCast = Physics2D.BoxCast(m_BoxCastOrigin.position, new Vector2(1, 1), 0, -transform.up, 0.1f, layer);
 
-            while (true)
+            m_IsJump = boxCast.collider == null;
+
+            if (!m_IsJump)
             {
-                LayerMask layer = 1 << LayerMask.NameToLayer("Floor");
-                RaycastHit2D boxCast = Physics2D.BoxCast(m_BoxCastOrigin.position, new Vector2(1, 1), 0, -transform.up, 0.1f, layer);
-
-                m_IsJump = boxCast.collider == null;
-
-                if (!m_IsJump)
-                {
-                    m_Animator.SetTrigger("JumpEnd");
-                    yield break;
-                }
-
-                yield return null;
+                m_Animator.SetTrigger("JumpEnd");
+                yield break;
             }
+
+            yield return null;
         }
     }
 
-   
+    // Ú’n‚µ‚Ä‚¢‚é‚©‚ð’²‚×‚é
+    void ChackIsGround()
+    {
+        LayerMask layer = 1 << LayerMask.NameToLayer("Floor");
+        RaycastHit2D boxCast = Physics2D.BoxCast(m_BoxCastOrigin.position, new Vector2(1, 1), 0, -transform.up, 0.1f, layer);
+
+        m_IsJump = boxCast.collider == null;
+
+        if (m_IsJump)
+        {
+            StartCoroutine(CanJump());
+            m_Animator.SetTrigger("Jump");
+        }
+    }
 
     private void OnDrawGizmos()
     {
