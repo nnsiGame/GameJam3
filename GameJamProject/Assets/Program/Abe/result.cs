@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class result : MonoBehaviour
 {
@@ -9,8 +10,8 @@ public class result : MonoBehaviour
     [SerializeField] GameObject great;
     [SerializeField] GameObject wonderful;
 
-   
 
+    public Text scoreText;
     public int goodD;
     public int goodgreat;
     public int greatwonderful;
@@ -18,14 +19,15 @@ public class result : MonoBehaviour
 
     void Start()
     {
-        //Script1 script1 = GetComponent<Script1>();
+        GameObject script1Object = GameObject.Find("ScoreManager");
+        ScoreManager script1 = script1Object.GetComponent<ScoreManager>();
         // int point = script1.myVariable;
-         int point = 0;
+        int point = script1.m_Score;
+        scoreText.text = " " + script1.m_Score;
 
 
 
-
-    good.SetActive(false);
+        good.SetActive(false);
         great.SetActive(false);
         wonderful.SetActive(false);
 
