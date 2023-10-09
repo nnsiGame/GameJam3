@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ChangeBGMPoint
   - BGMManager
+  - EdgeScreen
   layers:
   - Default
   - TransparentFX

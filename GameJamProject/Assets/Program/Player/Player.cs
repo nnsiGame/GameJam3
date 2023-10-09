@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
 
-
+    [SerializeField] float m_MagicChargeSpeed = 3;
+    public float m_MagicChargeGage { get; private set; }
     float m_CurrentSpeed;                               // 現在の移動スピード
     [SerializeField] float m_MoveSpeed = 16f;           // 移動スピードの最大値
     [SerializeField] float m_AccelerationSpeed = 14.5f; // 加速度
@@ -44,6 +46,7 @@ public class Player : MonoBehaviour
         m_CurrentState = State.Normal;
         m_BGMManager = GameObject.FindWithTag("BGMManager").GetComponent<BGMManager>();
         m_CurrentSpeed = 0;
+        m_MagicChargeGage = 5;
         m_RB = GetComponent<Rigidbody2D>();
         m_ShockWaveCreatePoint = transform.Find("ShockWaveCreatePoint");
 
@@ -55,8 +58,12 @@ public class Player : MonoBehaviour
         if (m_CurrentState == State.Normal)
         {
             Jump();
-            bool attack = Input.GetMouseButtonDown(0);
-            if (attack) Instantiate(m_BGMManager.m_ABGM ? m_AMagic : m_BMagic, m_MagicCreatePoint.position, m_MagicCreatePoint.transform.rotation);
+            bool attack = Input.GetMouseButtonDown(0) && m_MagicChargeGage >= 1;
+            if (attack)
+            {
+                Instantiate(m_BGMManager.m_ABGM ? m_AMagic : m_BMagic, m_MagicCreatePoint.position, m_MagicCreatePoint.transform.rotation);
+                m_MagicChargeGage -= 1;
+            }
 
             // BGMをチェンジする
             if (Input.GetButtonDown("ChangeBGM"))
@@ -68,6 +75,8 @@ public class Player : MonoBehaviour
                     Instantiate(m_ShockWave, m_ShockWaveCreatePoint.position, Quaternion.identity);
                 }
             }
+
+            m_MagicChargeGage = Mathf.Clamp(m_MagicChargeGage + m_MagicChargeSpeed * Time.deltaTime, 0, 5);
         }
     }
 
@@ -76,40 +85,45 @@ public class Player : MonoBehaviour
         if (m_CurrentState == State.Normal)
         {
             Move();
+
+
         }
     }
 
     // 移動関数
     void Move()
     {
-        float moveX = Input.GetAxisRaw("Horizontal");
+        //float moveX = Input.GetAxisRaw("Horizontal");
+        //float moveX = 1;
 
-        float accelerationSpeed = Time.deltaTime * m_AccelerationSpeed;
+        //float accelerationSpeed = Time.deltaTime * m_AccelerationSpeed;
 
-        // 移動スピードを少しづつ最大値に近づける
-        if (moveX > 0) // 右が押された場合
-        {
-            if (m_CurrentSpeed < m_MoveSpeed - 0.1f) m_CurrentSpeed = Mathf.Lerp(m_CurrentSpeed, m_MoveSpeed, accelerationSpeed);
-            else m_CurrentSpeed = m_MoveSpeed;
+        //// 移動スピードを少しづつ最大値に近づける
+        //if (moveX > 0) // 右が押された場合
+        //{
+        //    if (m_CurrentSpeed < m_MoveSpeed - 0.1f) m_CurrentSpeed = Mathf.Lerp(m_CurrentSpeed, m_MoveSpeed, accelerationSpeed);
+        //    else m_CurrentSpeed = m_MoveSpeed;
 
-            transform.rotation = new Quaternion(transform.rotation.x, 0, transform.rotation.z, transform.rotation.w);
-        }
-        else if (moveX < 0) // 左が押された場合
-        {
-            if (m_CurrentSpeed > -m_MoveSpeed + 0.1f) m_CurrentSpeed = Mathf.Lerp(m_CurrentSpeed, -m_MoveSpeed, accelerationSpeed);
-            else m_CurrentSpeed = -m_MoveSpeed;
+        //    transform.rotation = new Quaternion(transform.rotation.x, 0, transform.rotation.z, transform.rotation.w);
+        //}
+        //else if (moveX < 0) // 左が押された場合
+        //{
+        //    if (m_CurrentSpeed > -m_MoveSpeed + 0.1f) m_CurrentSpeed = Mathf.Lerp(m_CurrentSpeed, -m_MoveSpeed, accelerationSpeed);
+        //    else m_CurrentSpeed = -m_MoveSpeed;
 
-            transform.rotation = new Quaternion(transform.rotation.x, 180, transform.rotation.z, transform.rotation.w);
-        }
-        else // 何も押されていない、もしくは両方が押されている場合
-        {
-            if (Mathf.Abs(m_CurrentSpeed) > 0.1f) m_CurrentSpeed = Mathf.Lerp(m_CurrentSpeed, 0, accelerationSpeed);
-            else m_CurrentSpeed = 0.0f;
-        }
+        //    transform.rotation = new Quaternion(transform.rotation.x, 180, transform.rotation.z, transform.rotation.w);
+        //}
+        //else // 何も押されていない、もしくは両方が押されている場合
+        //{
+        //    if (Mathf.Abs(m_CurrentSpeed) > 0.1f) m_CurrentSpeed = Mathf.Lerp(m_CurrentSpeed, 0, accelerationSpeed);
+        //    else m_CurrentSpeed = 0.0f;
+        //}
 
-        m_Animator.SetFloat("VelocityX", Mathf.Abs(moveX));
-        Vector2 newVelocity = new Vector2(m_CurrentSpeed, m_RB.velocity.y);
-        m_RB.velocity = newVelocity;
+        //m_Animator.SetFloat("VelocityX", Mathf.Abs(moveX));
+        //Vector2 newVelocity = new Vector2(m_CurrentSpeed, m_RB.velocity.y);
+        //m_RB.velocity = newVelocity;
+
+        m_Animator.SetFloat("VelocityX", 1);
     }
 
     // ジャンプ
@@ -150,6 +164,7 @@ public class Player : MonoBehaviour
         }
     }
 
+   
 
     private void OnDrawGizmos()
     {
@@ -164,5 +179,10 @@ public class Player : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("ChangeBGMPoint")) m_CanCreateShockWave = false;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("EdgeScreen")) Destroy(gameObject);
     }
 }

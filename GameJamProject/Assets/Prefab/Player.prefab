@@ -243,7 +243,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eda5dde6d4e3a7443829c5ffd0eaef66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MoveSpeed: 10
+  m_MagicChargeSpeed: 3
+  m_MoveSpeed: 3.2
   m_AccelerationSpeed: 14.5
   m_JumpPower: 5
   m_AMagic: {fileID: 6863432232216567692, guid: 4af21b8a06bd89941a698afe6792fdd0, type: 3}
