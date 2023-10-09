@@ -5,12 +5,14 @@ using UnityEngine;
 public class ScoreManager : MonoBehaviour
 {
     public int m_Score { get;private set; }
-
-    public void PlusScore(int score) => m_Score += score;
-
     private void Start()
     {
         DontDestroyOnLoad(this.gameObject);
     }
+
+    public void PlusScore(int score) => m_Score += score;
+
+
+    public void ResetScore() => m_Score = 0;
 
 }
