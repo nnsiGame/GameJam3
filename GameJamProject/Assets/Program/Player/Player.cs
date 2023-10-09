@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    int m_HP;
 
     [SerializeField] float m_MagicChargeSpeed = 3;
     public float m_MagicChargeGage { get; private set; }
@@ -40,6 +41,8 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        m_HP = 3;
+
         m_IsJump = false;
         m_CanCreateShockWave = false;
 
@@ -55,15 +58,20 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if (m_HP <= 0 && m_CurrentState == State.Normal)
+        {
+            m_Animator.SetTrigger("Die");
+            transform.parent = null;
+            m_CurrentState = State.Die;
+
+        }
+
         if (m_CurrentState == State.Normal)
         {
             Jump();
             bool attack = Input.GetMouseButtonDown(0) && m_MagicChargeGage >= 1;
-            if (attack)
-            {
-                Instantiate(m_BGMManager.m_ABGM ? m_AMagic : m_BMagic, m_MagicCreatePoint.position, m_MagicCreatePoint.transform.rotation);
-                m_MagicChargeGage -= 1;
-            }
+            if (attack) m_Animator.SetTrigger("Attack");
+            
 
             // BGMをチェンジする
             if (Input.GetButtonDown("ChangeBGM"))
@@ -124,6 +132,13 @@ public class Player : MonoBehaviour
         //m_RB.velocity = newVelocity;
 
         m_Animator.SetFloat("VelocityX", 1);
+    }
+
+    // 魔法生成（アニメーションイベントで使用
+    void CreateMagic()
+    {
+        Instantiate(m_BGMManager.m_ABGM ? m_AMagic : m_BMagic, m_MagicCreatePoint.position, m_MagicCreatePoint.transform.rotation);
+        m_MagicChargeGage -= 1;
     }
 
     // ジャンプ

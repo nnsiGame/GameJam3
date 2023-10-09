@@ -1686,6 +1686,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 707829777585233591, guid: 52646bb64823ba8498ff4eb42e973b6b, type: 3}
+      propertyPath: m_MagicChargeSpeed
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 4685079859312841770, guid: 52646bb64823ba8498ff4eb42e973b6b, type: 3}
       propertyPath: m_Name
       value: Main Camera
