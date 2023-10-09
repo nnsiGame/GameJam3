@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    int m_HP;
+    public float m_AMusicGage { get; private set; }
+    public float m_BMusicGage { get; private set; }
 
     [SerializeField] float m_MagicChargeSpeed = 3;
     public float m_MagicChargeGage { get; private set; }
@@ -20,6 +21,8 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject m_AMagic;
     [SerializeField] GameObject m_BMagic;
     [SerializeField] GameObject m_ShockWave;
+
+    [SerializeField] ParticleSystem m_Particle;
 
     Transform m_ShockWaveCreatePoint;
     [SerializeField] Transform m_MagicCreatePoint; // 魔法を生成するポジション
@@ -41,8 +44,6 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_HP = 3;
-
         m_IsJump = false;
         m_CanCreateShockWave = false;
 
@@ -50,6 +51,8 @@ public class Player : MonoBehaviour
         m_BGMManager = GameObject.FindWithTag("BGMManager").GetComponent<BGMManager>();
         m_CurrentSpeed = 0;
         m_MagicChargeGage = 5;
+        m_AMusicGage = 60;
+        m_BMusicGage = 60;
         m_RB = GetComponent<Rigidbody2D>();
         m_ShockWaveCreatePoint = transform.Find("ShockWaveCreatePoint");
 
@@ -58,7 +61,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (m_HP <= 0 && m_CurrentState == State.Normal)
+        if (m_AMusicGage <= 0 && m_BMusicGage <= 0 && m_CurrentState == State.Normal)
         {
             m_Animator.SetTrigger("Die");
             m_Animator.ResetTrigger("Attack");
@@ -66,7 +69,6 @@ public class Player : MonoBehaviour
             m_Animator.ResetTrigger("HitDamage");
             transform.parent = null;
             m_CurrentState = State.Die;
-
         }
 
         if (m_CurrentState == State.Normal)
@@ -74,12 +76,14 @@ public class Player : MonoBehaviour
             Jump();
             bool attack = Input.GetMouseButtonDown(0) && m_MagicChargeGage >= 1;
             if (attack) m_Animator.SetTrigger("Attack");
-            
+
 
             // BGMをチェンジする
             if (Input.GetButtonDown("ChangeBGM"))
             {
                 m_BGMManager.ChangeBGM();
+
+                m_Particle.Play();
 
                 if (m_CanCreateShockWave)
                 {
@@ -88,6 +92,9 @@ public class Player : MonoBehaviour
             }
 
             m_MagicChargeGage = Mathf.Clamp(m_MagicChargeGage + m_MagicChargeSpeed * Time.deltaTime, 0, 5);
+
+            if (m_BGMManager.m_ABGM) m_AMusicGage -= Time.deltaTime;
+            else m_BMusicGage -= Time.deltaTime;
         }
     }
 
@@ -207,10 +214,9 @@ public class Player : MonoBehaviour
     {
         if (collision.CompareTag("ChangeBGMPoint")) m_CanCreateShockWave = true;
 
-        if(collision.CompareTag("OrangeEnemy") || collision.CompareTag("PurpleEnemy") || collision.CompareTag("LargeEnemy"))
+        if (collision.CompareTag("OrangeEnemy") || collision.CompareTag("PurpleEnemy") || collision.CompareTag("LargeEnemy"))
         {
             m_Animator.SetTrigger("HitDamage");
-            m_HP--;
         }
     }
 
