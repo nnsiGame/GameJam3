@@ -22,4 +22,12 @@ public class ShockWave : MonoBehaviour
             yield return null;
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("LargeEnemy"))
+        {
+            Destroy(collision.gameObject);
+        }
+    }
 }

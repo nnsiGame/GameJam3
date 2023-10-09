@@ -61,6 +61,9 @@ public class Player : MonoBehaviour
         if (m_HP <= 0 && m_CurrentState == State.Normal)
         {
             m_Animator.SetTrigger("Die");
+            m_Animator.ResetTrigger("Attack");
+            m_Animator.ResetTrigger("Jump");
+            m_Animator.ResetTrigger("HitDamage");
             transform.parent = null;
             m_CurrentState = State.Die;
 
@@ -203,6 +206,12 @@ public class Player : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("ChangeBGMPoint")) m_CanCreateShockWave = true;
+
+        if(collision.CompareTag("OrangeEnemy") || collision.CompareTag("PurpleEnemy") || collision.CompareTag("LargeEnemy"))
+        {
+            m_Animator.SetTrigger("HitDamage");
+            m_HP--;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)

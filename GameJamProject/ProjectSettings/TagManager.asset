@@ -7,6 +7,11 @@ TagManager:
   - ChangeBGMPoint
   - BGMManager
   - EdgeScreen
+  - Enemy
+  - PurpleEnemy
+  - OrangeEnemy
+  - LargeEnemy
+  - ShockWave
   layers:
   - Default
   - TransparentFX
