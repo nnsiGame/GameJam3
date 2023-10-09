@@ -436,8 +436,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38f5dc99c62154e40a199156883a90c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AGage: {fileID: 520973641408664856}
-  m_BGage: {fileID: 1044022428855959181}
+  m_AGage: {fileID: 1044022428855959181}
+  m_BGage: {fileID: 520973641408664856}
+  m_AImage: {fileID: 6573858059859446122}
+  m_BImage: {fileID: 8735013719638937484}
 --- !u!1 &6996553621086462410
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,7 +12,5 @@ public class ScoreManager : MonoBehaviour
 
     public void PlusScore(int score) => m_Score += score;
 
-
     public void ResetScore() => m_Score = 0;
-
 }
