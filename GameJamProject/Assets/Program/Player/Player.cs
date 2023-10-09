@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject m_BMagic;
     [SerializeField] GameObject m_ShockWave;
 
+    Transform m_ShockWaveCreatePoint;
     [SerializeField] Transform m_MagicCreatePoint; // 魔法を生成するポジション
     [SerializeField] Transform m_BoxCastOrigin;    // BoxCastを放つオリジン
 
@@ -44,6 +45,7 @@ public class Player : MonoBehaviour
         m_BGMManager = GameObject.FindWithTag("BGMManager").GetComponent<BGMManager>();
         m_CurrentSpeed = 0;
         m_RB = GetComponent<Rigidbody2D>();
+        m_ShockWaveCreatePoint = transform.Find("ShockWaveCreatePoint");
 
         m_Animator = GetComponent<Animator>();
     }
@@ -63,7 +65,7 @@ public class Player : MonoBehaviour
 
                 if (m_CanCreateShockWave)
                 {
-                    Instantiate(m_ShockWave, transform.position, Quaternion.identity);
+                    Instantiate(m_ShockWave, m_ShockWaveCreatePoint.position, Quaternion.identity);
                 }
             }
         }

@@ -4,8 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - SceneManager
   - ChangeBGMPoint
+  - BGMManager
   layers:
   - Default
   - TransparentFX
@@ -13,8 +13,8 @@ TagManager:
   - Floor
   - Water
   - UI
-  - 
-  - 
+  - EdgeScreen
+  - Player
   - 
   - 
   - 

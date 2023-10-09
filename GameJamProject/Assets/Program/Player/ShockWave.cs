@@ -18,7 +18,7 @@ public class ShockWave : MonoBehaviour
         {
             transform.localScale = new Vector3(transform.localScale.x + m_EnlargeSpeed * Time.deltaTime, transform.localScale.y + m_EnlargeSpeed * Time.deltaTime, transform.localScale.z);
 
-            spriteRenderer.color -= new Color(0, 0, 0, 5 * Time.deltaTime);
+            spriteRenderer.color -= new Color(0, 0, 0, 4 * Time.deltaTime);
             yield return null;
         }
     }
